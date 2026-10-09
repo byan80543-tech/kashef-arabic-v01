@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="كاشف — مساعد عربي لفحوصات أمنية أولية ضمن نطاق مصرح به وتوثيق البلاغات.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>كاشف | مساعد أمني</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brandmark">ك</div><div><strong>كاشف</strong><small>مساعد أمني للباحثين</small></div></div>
+    <span class="local-badge"><i></i> نسخة تجريبية</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">بحث مسؤول • توثيق واضح</div>
+      <h1>اكتشف المشكلة.<br><span>وثّقها بمسؤولية.</span></h1>
+      <p>فحوصات أولية آمنة، وتنظيم نطاق الإذن، وتجهيز بلاغ احترافي — من هاتفك.</p>
+      <div class="hero-actions">
+        <button class="primary" data-go="scan">ابدأ فحصا جديدا</button>
+        <button class="secondary" data-go="report">إنشاء بلاغ</button>
+      </div>
+      <div class="notice"><b>قبل الفحص:</b> استخدم الأداة فقط على الأنظمة التي تملكها أو لديك إذن صريح لاختبارها. إدخال النطاق وحده لا يمنح الإذن.</div>
+    </section>
+
+    <nav class="tabs" aria-label="أقسام التطبيق">
+      <button class="tab active" data-tab="scan">فحص آمن</button>
+      <button class="tab" data-tab="scope">نطاق الإذن</button>
+      <button class="tab" data-tab="report">البلاغات</button>
+      <button class="tab" data-tab="guide">الدليل</button>
+    </nav>
+
+    <section class="panel active" id="panel-scan">
+      <div class="section-heading"><div><span class="kicker">01 / الفحص</span><h2>فحص أولي لموقع ويب</h2></div><span class="pill">غير تخريبي</span></div>
+      <p class="muted">يفحص كاشف إعدادات يمكن الوصول إليها من المتصفح فقط. قد تمنع سياسة CORS قراءة بعض النتائج؛ لذلك لا يعني فشل القراءة وجود ثغرة.</p>
+      <form id="scan-form">
+        <label for="target-url">عنوان الموقع</label>
+        <input id="target-url" type="url" placeholder="https://example.com" required autocomplete="url">
+        <label for="scope-select">نطاق الإذن المسجل</label>
+        <select id="scope-select" required><option value="">اختر نطاقا مسجلا</option></select>
+        <label class="checkline"><input type="checkbox" id="confirm-safe"> أؤكد أن لدي إذنا صريحا، وأن هذا العنوان داخل النطاق المسموح.</label>
+        <button class="primary full" type="submit">تشغيل الفحص الآمن</button>
+      </form>
+      <div id="scan-status" class="status hidden" role="status"></div>
+      <div id="scan-results" class="results"></div>
+      <div class="mini-note">النسخة الحالية لا تنفذ استغلالا أو تخمينا لكلمات المرور أو اختبارات ضغط. فحص الويب يجري طلب قراءة عاديّا واحدا فقط.</div>
+    </section>
+
+    <section class="panel" id="panel-scope">
+      <div class="section-heading"><div><span class="kicker">02 / الإذن</span><h2>سجل نطاقات الاختبار</h2></div></div>
+      <p class="muted">سجّل نطاقا مصرحا به قبل فحصه. احتفظ بنسخة من قواعد البرنامج أو رسالة الإذن خارج التطبيق أيضا.</p>
+      <form id="scope-form">
+        <label for="scope-name">اسم البرنامج أو مالك الأصل</label>
+        <input id="scope-name" placeholder="مثال: مختبرك الشخصي" required maxlength="100">
+        <label for="scope-type">نوع الأصل</label>
+        <select id="scope-type"><option value="web">موقع ويب</option><option value="android">تطبيق أندرويد</option><option value="both">موقع وتطبيق</option></select>
+        <label for="scope-target">النطاق أو اسم التطبيق / معرّف الحزمة</label>
+        <input id="scope-target" placeholder="example.com أو com.example.app" required maxlength="250">
+        <label for="scope-proof">أساس الإذن</label>
+        <select id="scope-proof" required>
+          <option value="">اختر أساس الإذن</option>
+          <option>أملك الأصل</option><option>برنامج مكافآت عام — قرأت النطاق والقواعد</option><option>إذن مكتوب من المالك</option><option>مختبر تدريبي مصرح به</option>
+        </select>
+        <label for="scope-notes">ملاحظات وحدود الاختبار (اختياري)</label>
+        <textarea id="scope-notes" rows="2" placeholder="مثال: اختبار يدوي فقط، دون حسابات حقيقية"></textarea>
+        <button class="primary full" type="submit">إضافة إلى سجل الإذن</button>
+      </form>
+      <div id="scope-list" class="stack"></div>
+    </section>
+
+    <section class="panel" id="panel-report">
+      <div class="section-heading"><div><span class="kicker">03 / التوثيق</span><h2>إنشاء بلاغ أمني</h2></div></div>
+      <p class="muted">سجّل ما لاحظته بدقة. لا تكتب كلمات مرور أو رموز جلسات أو بيانات شخصية حقيقية في التقرير.</p>
+      <form id="report-form">
+        <label for="report-title">عنوان البلاغ</label>
+        <input id="report-title" required maxlength="140" placeholder="مثال: ترويسة أمان غير موجودة">
+        <label for="report-target">الأصل المتأثر</label>
+        <input id="report-target" required maxlength="250" placeholder="https://example.com/path أو اسم الحزمة">
+        <label for="report-kind">نوع النتيجة</label>
+        <select id="report-kind"><option>إعداد أمني</option><option>التحكم في الوصول</option><option>مصادقة أو جلسات</option><option>إدخال ومعالجة بيانات</option><option>تطبيق أندرويد</option><option>أخرى</option></select>
+        <label for="report-severity">الخطورة المقدّرة</label>
+        <select id="report-severity"><option>غير محددة — تحتاج إلى تحقق</option><option>منخفضة</option><option>متوسطة</option><option>عالية</option><option>حرجة</option></select>
+        <label for="report-summary">الملخص والأثر المحتمل</label>
+        <textarea id="report-summary" required rows="3" placeholder="ما الذي حدث؟ وما الأثر الأمني المثبت؟"></textarea>
+        <label for="report-steps">خطوات إعادة الإنتاج الآمنة</label>
+        <textarea id="report-steps" required rows="4" placeholder="1. افتح ...&#10;2. نفّذ ...&#10;3. لاحظ ..."></textarea>
+        <label for="report-evidence">الأدلة غير الحساسة (اختياري)</label>
+        <textarea id="report-evidence" rows="2" placeholder="الوقت، حالة الاستجابة، لقطة منقحة، أو ملاحظة تقنية"></textarea>
+        <button class="primary full" type="submit">حفظ البلاغ</button>
+      </form>
+      <div id="report-list" class="stack"></div>
+      <div class="button-row"><button class="secondary" id="export-json">تصدير البيانات JSON</button><button class="secondary" id="export-md">تصدير البلاغات Markdown</button></div>
+    </section>
+
+    <section class="panel" id="panel-guide">
+      <div class="section-heading"><div><span class="kicker">04 / السلامة</span><h2>دليل الاستخدام</h2></div></div>
+      <div class="guide-card"><h3>ما الذي يفعله الإصدار الأول؟</h3><ul><li>يسجل نطاقات الإذن محليا على جهازك.</li><li>يجري طلب GET عاديّا واحدا لفحص ترويسات يمكن للمتصفح قراءتها.</li><li>يساعد على تدوين نتائج الويب أو أندرويد يدويا وتصديرها.</li><li>لا يرسل بياناتك إلى خادم هذا التطبيق؛ التخزين محلي في المتصفح.</li></ul></div>
+      <div class="guide-card"><h3>ما الذي لا يفعله؟</h3><ul><li>لا يثبت وجود ثغرة قابلة للمكافأة تلقائيا.</li><li>لا يفحص ملفات APK أو يحللها آليا في هذه النسخة.</li><li>لا يتجاوز تسجيل الدخول أو CORS أو ضوابط الوصول.</li><li>لا يضمن أن أي اختبار محمي قانونيا؛ المرجع هو الإذن والقانون وقواعد البرنامج.</li></ul></div>
+      <div class="guide-card"><h3>النتائج المحتملة للفحص</h3><p>قد تظهر الترويسات غير موجودة أو غير قابلة للقراءة. هذا مؤشر إعداد فقط، ولا يثبت وحده قابلية الاستغلال. بعض الترويسات تعتمد على نوع التطبيق وطريقة نشره، ويجب تفسيرها ضمن السياق.</p></div>
+      <button class="danger-outline" id="clear-data">مسح كل البيانات المحلية</button>
+    </section>
+  </main>
+  <footer><span>كاشف · إصدار تجريبي 0.1</span><span>الفحص المسؤول يبدأ بالإذن.</span></footer>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
